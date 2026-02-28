@@ -5,22 +5,22 @@
 NutriGen Pro es una herramienta web interactiva diseñada para la creación, visualización y exportación de etiquetas de información nutricional en tiempo real. Este proyecto nació como una solución personal a una necesidad específica durante un encargo de diseño de etiquetas de producto para un cliente, y se ha desarrollado con fines didácticos y prácticos.
 
 > [!IMPORTANT]  
-> **Aviso de Proyecto Amateur y Didáctico:**  
-> Este es un proyecto desarrollado de forma amateur con fines de aprendizaje y uso personal, utilizando asistencia de Inteligencia Artificial. **No se garantiza la adhesión al 100% a ninguna legislación, normativa o regulación de etiquetado vigente (FDA, NOM-051, UE, etc.).** Los cálculos y redondeos pueden contener errores. Debe usarse únicamente como referencia creativa o didáctica y siempre bajo la supervisión de un profesional en regulaciones alimentarias.
+> **Aviso de Tipo de Proyecto:**  
+> Este es un proyecto desarrollado con fines de aprendizaje y uso personal, utilizando asistencia de Inteligencia Artificial. **No se garantiza la adhesión al 100% a ninguna legislación, normativa o regulación de etiquetado vigente (FDA, NOM-051, UE, etc.).** Los cálculos y redondeos pueden contener errores. Debe usarse únicamente como referencia creativa o didáctica y siempre bajo la supervisión de un profesional en regulaciones alimentarias.
 
 ## 🌟 Motivación del Proyecto
 
-Este sitio fue creado porque necesitaba una herramienta ágil para generar estructuras de tablas nutricionales precisas para un proyecto de diseño gráfico. Al no encontrar una opción que me permitiera exportar vectores limpios y ajustar parámetros rápidamente, decidí construir esta solución. La comparto para cualquier otra persona que pueda encontrarla útil en sus propios flujos de trabajo de diseño o estudio.
+Este sitio fue creado porque necesitaba una herramienta ágil para generar estructuras de tablas nutricionales precisas para un proyecto de diseño gráfico. Al no encontrar una opción 100% gratuita y completa que me permitiera exportar la etiqueta y ajustar parámetros rápidamente, decidí construir esta solución. La comparto para cualquier otra persona que pueda encontrarla útil en sus propios flujos de trabajo de diseño o estudio.
 
 ## 🚀 Funcionalidades Principales
 
 ### 1. Estándares Internacionales (En desarrollo)
 
-El sistema permite alternar entre diferentes normativas de etiquetado, adaptando automáticamente el formato y los nutrientes requeridos:
+El sistema permite alternar entre diferentes normativas de etiquetado (en desarrollo), adaptando automáticamente el formato y los nutrientes requeridos:
 
 - **EEUU (FDA 2016):** Implementación de los formatos Vertical, Tabular/Horizontal y Lineal.
-- **México (NOM-051):** Visualización de la tabla nutricional con sistema de sellos de advertencia octogonales.
-- **Europa (Reg. 1169/2011):** Estructura basada en 100g/100ml (en desarrollo).
+- **México (NOM-051):** Visualización de la tabla nutricional con sistema de sellos de advertencia octogonales. (para desarrollo futuro)
+- **Europa (Reg. 1169/2011):** Estructura basada en 100g/100ml (para desarrollo futuro).
 
 ### 2. Personalización en Tiempo Real
 
@@ -32,7 +32,7 @@ El sistema permite alternar entre diferentes normativas de etiquetado, adaptando
 ### 3. Herramientas de Exportación Profesional
 
 - **JPG de Alta Resolución:** Exportación en diferentes escalas (hasta 5x) para uso en presentaciones o mockups.
-- **Vectores SVG:** Descarga de archivos vectoriales para edición profesional en software como Adobe Illustrator, Figma o CorelDraw.
+- **Vectores SVG:** Descarga de archivos vectoriales para escalado y edición.
 - **Vista Previa Expandida:** Modo de pantalla completa para inspección detallada de la etiqueta.
 
 ### 4. Interfaz y Experiencia de Usuario
@@ -51,10 +51,15 @@ El sistema permite alternar entre diferentes normativas de etiquetado, adaptando
   - [Tabler Icons](https://tabler-icons.io/) para la iconografía.
   - [Flag Icons](https://github.com/lipis/flag-icons) para la selección de idiomas.
   - [html-to-image](https://github.com/bubkoo/html-to-image) para el procesamiento de exportaciones.
+- **Asistencia de IA:**
+  - [Antigravity](https://antigravity.ai/) como espacio de trabajo y desarrollo.
+  - [Copilot](https://apps.microsoft.com/detail/9nht9rb2f4hd) para búsqueda de información y fuentes.
+  - [Gemini](https://gemini.google.com/) como agente de IA.
+  - [Claude](https://claude.com/) como agente de IA.
 
 ## 📄 Licencia
 
-Este proyecto es libre para uso personal y educativo. Si decides utilizarlo para fines comerciales, recuerda que la responsabilidad de validar la información nutricional recae totalmente en el usuario final.
+Este proyecto es de uso libre para fines personales y educativos. Si decides emplearlo con propósitos comerciales, la responsabilidad de validar la información nutricional y asegurar su cumplimiento normativo recae íntegramente en el usuario final. No se asume responsabilidad alguna por posibles errores o imprecisiones en el contenido de las etiquetas generadas. Dar crédito al autor es opcional, pero cualquier mención es bienvenida y se agradece enormemente.
 
 ---
 
