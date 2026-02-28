@@ -1,0 +1,264 @@
+/* NOM-051 Mexico Labels Styles - isolated from FDA */
+
+.nom-container {
+  background: white;
+  color: black;
+  padding: 15px;
+  font-family: "Arial Black", "Arial", sans-serif;
+  width: 100%;
+  max-width: 500px;
+  box-sizing: border-box;
+}
+
+/* Front of Pack Labels (Octagons) */
+.nom-front-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 20px;
+}
+
+.nom-octagons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+/* Individual Seal Box */
+.nom-seal-block {
+  background: white;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90px;
+  padding: 4px 0 0 0;
+  box-sizing: border-box;
+}
+
+.nom-octagon {
+  width: 75px;
+  height: 75px;
+  background: black;
+  position: relative;
+  clip-path: polygon(
+    30% 0,
+    70% 0,
+    100% 30%,
+    100% 70%,
+    70% 100%,
+    30% 100%,
+    0 70%,
+    0 30%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.nom-octagon::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border: 1.5px solid white;
+  clip-path: polygon(
+    30% 0,
+    70% 0,
+    100% 30%,
+    100% 70%,
+    70% 100%,
+    30% 100%,
+    0 70%,
+    0 30%
+  );
+}
+
+.octagon-content {
+  color: white;
+  text-align: center;
+  font-weight: 900;
+  line-height: 1.1;
+  z-index: 2;
+  padding: 5px;
+}
+
+.octagon-content .exceso {
+  font-size: 9px;
+  display: block;
+}
+
+.octagon-content .nutriente {
+  font-size: 10px;
+  text-transform: uppercase;
+  display: block;
+}
+
+.nom-seal-label {
+  width: 100%;
+  border-top: 1.5px solid black;
+  font-size: 7.5px;
+  font-weight: 700;
+  text-align: center;
+  padding: 2px 0;
+  background: white;
+  color: black;
+}
+
+/* Precautionary Legends Boxed Style */
+.nom-cautions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+.nom-caution-block {
+  border: 1.5px solid black;
+  padding: 2px;
+  background: white;
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nom-caution-inner {
+  background: black;
+  color: white;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 900;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Nutritional Table NOM-051 Updated Design */
+.nom-table-container {
+  border: 4px solid black;
+  padding: 10px;
+  width: 100%;
+}
+
+.nom-table-header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.nom-table-title {
+  font-weight: 900;
+  font-size: 24px;
+  text-transform: none;
+  text-align: left;
+  line-height: 1.1;
+}
+
+.nom-table-header-unit {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.nom-table-black-bar {
+  height: 18px;
+  background: black;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.nom-official-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1.5px solid black;
+}
+
+.nom-official-table td {
+  font-size: 14px;
+  padding: 8px;
+  border: 1px solid black;
+  line-height: 1.1;
+  vertical-align: middle;
+}
+
+.nom-col-label {
+  text-align: left;
+  font-weight: 500;
+  width: 65%;
+}
+
+.nom-col-val {
+  text-align: right;
+  font-weight: 700;
+}
+
+.nom-col-val div {
+  line-height: 1.1;
+}
+
+.nom-kj {
+  font-size: 13px;
+  margin-top: 2px;
+}
+
+.nom-row-bold .nom-col-label {
+  font-weight: 700;
+}
+
+.nom-row-sub .nom-col-label {
+  padding-left: 35px;
+}
+
+.nom-table-footer {
+  border: 1.5px solid black;
+  border-top: none;
+  padding: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.nom-ingredients,
+.nom-allergens {
+  margin-top: 6px;
+}
+
+.nom-allergens {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Small Pack Exemption Styles */
+.nom-container.small-pack {
+  max-width: 250px;
+}
+
+.nom-seal-block.small-numerical {
+  width: auto;
+  padding: 4px;
+}
+
+.nom-seal-box.small-numerical .nom-octagon {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 0;
+}
+
+.nom-container.small-pack .nom-octagon {
+  width: 50px;
+  height: 50px;
+}
+.nom-container.small-pack .octagon-content .exceso {
+  font-size: 6px;
+}
+.nom-container.small-pack .octagon-content .nutriente {
+  font-size: 7px;
+}
+.nom-container.small-pack .octagon-content .numero {
+  font-size: 18px !important;
+}

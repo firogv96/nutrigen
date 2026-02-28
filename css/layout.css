@@ -1,0 +1,234 @@
+/* Layout structure */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Background gradient effect */
+.app-container::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle at 50% 50%,
+    hsla(var(--hue-primary), 100%, 40%, 0.1) 0%,
+    transparent 60%
+  );
+  z-index: -1;
+  pointer-events: none;
+}
+
+.app-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-primary);
+  font-size: 1.5rem;
+}
+
+.logo h1 {
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  letter-spacing: -0.025em;
+}
+
+.logo span {
+  color: var(--color-primary);
+  font-weight: 900;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.app-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 64px);
+}
+
+.editor-sidebar {
+  width: 33vw;
+  min-width: 380px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-bottom: 2rem;
+}
+
+.sidebar-header {
+  padding: 0px 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  background: var(--bg-glass);
+  /* backdrop-filter: var(--blur-strength);
+  -webkit-backdrop-filter: var(--blur-strength); */
+  z-index: 10;
+  transform: translateZ(0);
+  height: 3.2rem;
+  align-content: center;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-header h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#collapse-sidebar {
+  border: none;
+  background: transparent;
+  padding: 0.5rem;
+  width: auto;
+  height: auto;
+}
+
+#collapse-sidebar:hover {
+  background: hsla(var(--hue-primary), 10%, 50%, 0.1);
+  color: var(--color-primary);
+}
+
+.preview-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: radial-gradient(
+    circle at center,
+    transparent 0%,
+    rgba(0, 0, 0, 0.02) 100%
+  );
+}
+
+.preview-toolbar {
+  background: var(--bg-glass);
+  height: calc(3.2rem + 0px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 5;
+}
+
+.zoom-controls,
+.export-controls,
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toolbar-left {
+  gap: 1rem;
+}
+
+#zoom-level {
+  font-weight: 500;
+  min-width: 3rem;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.preview-playground {
+  flex: 1;
+  overflow: auto;
+  display: flex;
+  padding: 2rem;
+}
+
+.label-wrapper {
+  background: white; /* Etiquetas nutricionales casi siempre en blanco puros para impresión */
+  color: black;
+  box-shadow: var(--shadow-xl);
+  transform-origin: center center;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin: auto;
+}
+
+/* Scrollbars */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .app-content {
+    flex-direction: column;
+  }
+
+  .editor-sidebar {
+    width: 100%;
+    height: 50%;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .preview-panel {
+    height: 50%;
+  }
+}
+
+/* Sidebar Collapsed State */
+.sidebar-collapsed .editor-sidebar {
+  width: 0;
+  min-width: 0;
+  overflow: hidden;
+  border-right: none;
+  padding: 0;
+}
+
+.sidebar-collapsed #expand-sidebar {
+  display: flex !important;
+}
+
+.editor-sidebar {
+  transition:
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.3s ease;
+}

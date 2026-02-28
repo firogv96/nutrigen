@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            const theme = savedTheme || systemTheme;
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriGen Pro - Generador de Etiquetas Nutricionales</title>
+    
+    <!-- Favicons -->
+    <link rel="icon" href="assets/favicon/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@500;700&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css?v=4">
+    <link rel="stylesheet" href="css/reset.css?v=4">
+    <link rel="stylesheet" href="css/layout.css?v=4">
+    <link rel="stylesheet" href="css/components.css?v=4">
+    <link rel="stylesheet" href="css/labels.css?v=4">
+    <link rel="stylesheet" href="css/mexico-labels.css?v=4">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header glass-panel">
+            <div class="logo">
+                <i class="ti ti-leaf"></i>
+                <h1>NutriGen <span>Pro</span></h1>
+            </div>
+            <div class="header-actions">
+                <button id="new-label-btn" class="btn btn-primary">
+                    <i class="ti ti-file-plus"></i> <span data-i18n="ui.newLabel">Nueva Etiqueta</span>
+                </button>
+                <div id="app-lang-custom" class="custom-select-container" title="Idioma de la interfaz" data-target="app-lang" data-i18n-title="ui.langTooltip">
+                    <div class="custom-select-trigger">
+                        <span class="fi fi-es" id="selected-flag"></span>
+                        <span id="selected-lang-name" data-i18n="ui.langEs">Español</span>
+                        <i class="ti ti-chevron-down"></i>
+                    </div>
+                    <div class="custom-select-options glass-panel custom-scrollbar">
+                        <div class="custom-option selected" data-value="es">
+                            <span class="fi fi-es"></span>
+                            <span data-i18n="ui.langEs">Español</span>
+                        </div>
+                        <div class="custom-option" data-value="en">
+                            <span class="fi fi-us"></span>
+                            <span data-i18n="ui.langEn">English</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hidden select for compatibility if needed, but we'll update JS to use the custom one -->
+                <select id="app-lang" class="hidden">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                </select>
+                <button id="theme-toggle" class="icon-btn" title="Cambiar Tema" data-i18n-title="ui.themeToggle">
+                    <i class="ti ti-sun"></i>
+                </button>
+                <button id="info-btn" class="icon-btn" title="Información" data-i18n-title="ui.infoBtn">
+                    <i class="ti ti-info-circle"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="app-content">
+            <!-- Sidebar: Form -->
+            <aside class="editor-sidebar glass-panel custom-scrollbar">
+                <div class="sidebar-header">
+                    <h2 data-i18n="ui.sidebarTitle">Parámetros de Etiqueta</h2>
+                    <button id="collapse-sidebar" class="icon-btn" title="Contraer Sidebar" data-i18n-title="ui.collapseSidebar">
+                        <i class="ti ti-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <form id="label-form">
+                    <!-- Standard Settings -->
+                    <div class="form-section open">
+                        <div class="section-header">
+                            <i class="ti ti-settings"></i>
+                            <h3 data-i18n="ui.sectionBasic">Configuración Básica</h3>
+                            <i class="ti ti-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="standard" data-i18n="ui.standard">Estándar Internacional</label>
+                                <div class="custom-select-container form-select" data-target="standard">
+                                    <div class="custom-select-trigger">
+                                        <span data-i18n="ui.stdFda">EEUU (FDA 2016)</span>
+                                        <i class="ti ti-chevron-down"></i>
+                                    </div>
+                                    <div class="custom-select-options glass-panel custom-scrollbar">
+                                        <div class="custom-option selected" data-value="fda">
+                                            <span data-i18n="ui.stdFda">EEUU (FDA 2016)</span>
+                                        </div>
+                                        <div class="custom-option" data-value="nom051">
+                                            <span data-i18n="ui.stdNom">México (NOM-051)</span>
+                                        </div>
+                                        <div class="custom-option" data-value="eu">
+                                            <span data-i18n="ui.stdEu">Europa (Reg. 1169/2011)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <select id="standard" name="standard" class="hidden">
+                                    <option value="fda">EEUU (FDA 2016)</option>
+                                    <option value="nom051">México (NOM-051)</option>
+                                    <option value="eu">Europa (Reg. 1169/2011)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" data-std="fda eu">
+                                <label for="label-lang" data-i18n="ui.labelLang">Idioma de la Etiqueta</label>
+                                <div class="custom-select-container form-select" data-target="label-lang">
+                                    <div class="custom-select-trigger">
+                                        <span data-i18n="ui.langEs">Español</span>
+                                        <i class="ti ti-chevron-down"></i>
+                                    </div>
+                                    <div class="custom-select-options glass-panel custom-scrollbar">
+                                        <div class="custom-option selected" data-value="es">
+                                            <span data-i18n="ui.langEs">Español</span>
+                                        </div>
+                                        <div class="custom-option" data-value="en">
+                                            <span data-i18n="ui.langEn">Inglés</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <select id="label-lang" name="label-lang" class="hidden">
+                                    <option value="es">Español</option>
+                                    <option value="en">Inglés</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="orientation" data-i18n="ui.orientation">Orientación/Formato</label>
+                                <div class="custom-select-container form-select" data-target="orientation">
+                                    <div class="custom-select-trigger">
+                                        <span data-i18n="ui.oriVert">Vertical Estándar</span>
+                                        <i class="ti ti-chevron-down"></i>
+                                    </div>
+                                    <div class="custom-select-options glass-panel custom-scrollbar">
+                                        <div class="custom-option selected" data-value="vertical" data-std="fda eu">
+                                            <span data-i18n="ui.oriVert">Vertical Estándar</span>
+                                        </div>
+                                        <div class="custom-option" data-value="tabular" data-std="fda">
+                                            <span data-i18n="ui.oriTab">Tabular / Horizontal</span>
+                                        </div>
+                                        <div class="custom-option" data-value="linear" data-std="fda">
+                                            <span data-i18n="ui.oriLin">Lineal</span>
+                                        </div>
+                                        <div class="custom-option" data-value="nom-with-seals" data-std="nom051">
+                                            <span data-i18n="ui.oriNomWithSeals">Tabla con sellos</span>
+                                        </div>
+                                        <div class="custom-option" data-value="nom-no-seals" data-std="nom051">
+                                            <span data-i18n="ui.oriNomNoSeals">Tabla sin sellos</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <select id="orientation" name="orientation" class="hidden">
+                                    <option value="vertical" data-std="fda eu">Vertical Estándar</option>
+                                    <option value="tabular" data-std="fda">Tabular / Horizontal</option>
+                                    <option value="linear" data-std="fda">Lineal</option>
+                                    <option value="nom-with-seals" data-std="nom051">Tabla con sellos</option>
+                                    <option value="nom-no-seals" data-std="nom051">Tabla sin sellos</option>
+                                </select>
+                            </div>
+                            
+                            <div class="checkbox-group fda-only fda-footer-toggle hidden" style="margin-top: 24px;">
+                                <input type="checkbox" id="show-fda-footer" name="show-fda-footer" checked>
+                                <label for="show-fda-footer" data-i18n="ui.showFdaFooter">Mostrar pie de nota %VD</label>
+                                <i class="ti ti-info-circle info-icon" data-i18n-title="info.showFdaFooter"></i>
+                            </div>
+                            
+                            <!-- Validation Messages -->
+                            <div id="validation-panel" class="validation-panel hidden">
+                                <div class="validation-header">
+                                    <i class="ti ti-alert-circle"></i>
+                                    <span data-i18n="ui.validationTitle">Validación Legislativa</span>
+                                </div>
+                                <ul id="validation-list" class="validation-list">
+                                    <!-- Dynamic content -->
+                                </ul>
+                            </div>
+                            <div class="form-group hidden">
+                                <!-- Oculto por simplicidad de uso, se maneja automatico de momento -->
+                                <label for="dv-standard">Estándar de %VD</label>
+                                <select id="dv-standard" name="dv-standard">
+                                    <option value="auto">Automático</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Serving Dimensions -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="ti ti-box"></i>
+                            <h3 data-i18n="ui.sectionServing">Tamaño de Porción</h3>
+                            <i class="ti ti-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="input-grid">
+                                <div class="form-group">
+                                    <label for="servings-per-container" data-i18n="ui.servingsPerContainer">Porciones por envase</label>
+                                    <input type="text" id="servings-per-container" name="servings-per-container" data-i18n-placeholder="ui.servingsPerContainerPh" placeholder="Ej. Aprox. 8">
+                                </div>
+                                <div class="form-group">
+                                    <label for="rounding" data-i18n="ui.rounding">Redondeo</label>
+                                    <div class="custom-select-container form-select" data-target="rounding">
+                                        <div class="custom-select-trigger">
+                                            <span data-i18n="ui.roundingDefault">Por defecto</span>
+                                            <i class="ti ti-chevron-down"></i>
+                                        </div>
+                                        <div class="custom-select-options glass-panel custom-scrollbar">
+                                            <div class="custom-option selected" data-value="default">
+                                                <span data-i18n="ui.roundingDefault">Por defecto</span>
+                                            </div>
+                                            <div class="custom-option" data-value="usually">
+                                                <span data-i18n="ui.roundingUsually">Normalmente</span>
+                                            </div>
+                                            <div class="custom-option" data-value="varied">
+                                                <span data-i18n="ui.roundingVaried">Variado</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select id="rounding" name="rounding" class="hidden">
+                                        <option value="default">Por defecto</option>
+                                        <option value="usually">Normalmente</option>
+                                        <option value="varied">Variado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="serving-size-quantity" data-i18n="ui.servingSizeQuantity">Cantidad</label>
+                                    <input type="text" id="serving-size-quantity" name="serving-size-quantity" data-i18n-placeholder="ui.servingSizeQuantityPh" placeholder="Ej. 1/2">
+                                </div>
+                                <div class="form-group">
+                                    <label for="serving-size-quantity-units" data-i18n="ui.servingSizeQuantityUnits">Unidades</label>
+                                    <input type="text" id="serving-size-quantity-units" name="serving-size-quantity-units" data-i18n-placeholder="ui.servingSizeQuantityUnitsPh" placeholder="tazas">
+                                </div>
+                                <div class="form-group">
+                                    <label for="serving-size-weight" data-i18n="ui.servingSizeWeight">Peso/Volumen</label>
+                                    <input type="number" id="serving-size-weight" name="serving-size-weight" placeholder="55">
+                                </div>
+                                <div class="form-group">
+                                    <label for="serving-size-unit" data-i18n="ui.servingSizeUnit">Unidad</label>
+                                    <div class="custom-select-container form-select" data-target="serving-size-unit">
+                                        <div class="custom-select-trigger">
+                                            <span data-i18n="ui.unitGrams">Gramos (g)</span>
+                                            <i class="ti ti-chevron-down"></i>
+                                        </div>
+                                        <div class="custom-select-options glass-panel custom-scrollbar">
+                                            <div class="custom-option selected" data-value="g">
+                                                <span data-i18n="ui.unitGrams">Gramos (g)</span>
+                                            </div>
+                                            <div class="custom-option" data-value="ml">
+                                                <span data-i18n="ui.unitMl">Mililitros (mL)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select id="serving-size-unit" name="serving-size-unit" class="hidden">
+                                        <option value="g">Gramos (g)</option>
+                                        <option value="ml">Mililitros (mL)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="checkbox-group" style="margin-top: 0.5rem;">
+                                <input type="checkbox" id="use-free-serving-size" name="use-free-serving-size">
+                                <label for="use-free-serving-size" data-i18n="ui.useFreeServingSize">Usar texto libre de porción</label>
+                                <i class="ti ti-info-circle info-icon" data-i18n-title="info.useFreeServingSize"></i>
+                            </div>
+                            <div id="free-serving-size-container" class="form-group" style="margin-top: 0.5rem;">
+                                <label for="serving-size" data-i18n="ui.servingSize">Texto libre (Opcional)</label>
+                                <input type="text" id="serving-size" name="serving-size" data-i18n-placeholder="ui.servingSizePh" placeholder="Ej. 2/3 taza (55g)">
+                                <small style="opacity: 0.7; font-size: 0.8rem;">Si se rellena, sobrescribe los campos anteriores.</small>
+                            </div>
+                            <div class="form-group eu-only hidden">
+                                <label for="serving-size-base" data-i18n="ui.servingSizeBase">Porción estandarizada</label>
+                                <input type="text" id="serving-size-base" name="serving-size-base" value="100g" disabled>
+                                <small data-i18n="ui.servingSizeBaseHint">La UE requiere base de 100g/100ml.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Calories -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="ti ti-flame"></i>
+                            <h3 data-i18n="ui.sectionCalories">Calorías / Energía</h3>
+                            <i class="ti ti-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="calories" data-i18n="ui.calories">Calorías (kcal)</label>
+                                <input type="number" id="calories" name="calories" min="0" placeholder="0">
+                                <div class="checkbox-group" style="margin-top: 24px; margin-bottom: -8px;">
+                                    <input type="checkbox" id="apply-rounding" name="apply-rounding" checked>
+                                    <label for="apply-rounding" data-i18n="ui.applyRounding">Aplicar redondeo legal</label>
+                                    <i class="ti ti-info-circle info-icon" data-i18n-title="info.applyRounding"></i>
+                                </div>
+                            </div>
+                            <div class="form-group eu-only hidden">
+                                <label for="kj" data-i18n="ui.energyKj">Energía (kJ)</label>
+                                <input type="number" id="kj" name="kj" min="0" placeholder="0">
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="auto-kj" name="auto-kj" checked>
+                                    <label for="auto-kj" data-i18n="ui.autoKj">Calcular automáticamente</label>
+                                    <i class="ti ti-info-circle info-icon" data-i18n-title="info.autoKj"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Macronutrients -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="ti ti-meat"></i>
+                            <h3 data-i18n="ui.sectionMacros">Macronutrientes</h3>
+                            <i class="ti ti-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="input-grid">
+                                <div class="form-group">
+                                    <label for="total-fat" data-i18n="ui.totalFat">Grasa Total (g)</label>
+                                    <input type="number" id="total-fat" name="total-fat" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sat-fat" data-i18n="ui.satFat">Grasa Saturada (g)</label>
+                                    <input type="number" id="sat-fat" name="sat-fat" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="trans-fat" data-i18n="ui.transFat">Grasa Trans (g)</label>
+                                    <input type="number" id="trans-fat" name="trans-fat" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="poly-fat" data-i18n="ui.polyFat">Grasa Poliinsaturada (g)</label>
+                                    <input type="number" id="poly-fat" name="poly-fat" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="mono-fat" data-i18n="ui.monoFat" style="letter-spacing: -0.5px;">Grasa Monoinsaturada (g)</label>
+                                    <input type="number" id="mono-fat" name="mono-fat" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cholesterol" data-i18n="ui.cholesterol">Colesterol (mg)</label>
+                                    <input type="number" id="cholesterol" name="cholesterol" min="0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sodium" data-i18n="ui.sodium">Sodio (mg)</label>
+                                    <input type="number" id="sodium" name="sodium" min="0" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="total-carbs" data-i18n="ui.totalCarbs">Carbohidratos (g)</label>
+                                    <input type="number" id="total-carbs" name="total-carbs" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="dietary-fiber" data-i18n="ui.dietaryFiber">Fibra Dietética (g)</label>
+                                    <input type="number" id="dietary-fiber" name="dietary-fiber" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="total-sugars" data-i18n="ui.totalSugars">Azúcares Totales (g)</label>
+                                    <input type="number" id="total-sugars" name="total-sugars" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="added-sugars" data-i18n="ui.addedSugars">Azúcares Añadidos (g)</label>
+                                    <input type="number" id="added-sugars" name="added-sugars" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="sugar-alcohol" data-i18n="ui.sugarAlcohol">Polialcoholes (g)</label>
+                                    <input type="number" id="sugar-alcohol" name="sugar-alcohol" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="protein" data-i18n="ui.protein">Proteínas (g)</label>
+                                    <input type="number" id="protein" name="protein" min="0" step="0.1">
+                                </div>
+                            </div>
+                            <div class="checkbox-group" style="margin-top: 24px;">
+                                <input type="checkbox" id="show-protein-dv" name="show-protein-dv">
+                                <label for="show-protein-dv" data-i18n="ui.showProteinDv">Mostrar % Valor Diario de Proteína</label>
+                                <i class="ti ti-info-circle info-icon" data-i18n-title="info.showProteinDv"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vitamins and Minerals -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <i class="ti ti-pill"></i>
+                            <h3 data-i18n="ui.sectionVits">Vitaminas y Minerales</h3>
+                            <i class="ti ti-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="section-content">
+                            <p class="section-hint" data-i18n="ui.vitsHint">Dejar en blanco para omitir</p>
+                            <div class="input-grid">
+                                <div class="form-group">
+                                    <label for="vit-data-format" data-i18n="ui.vitDataFormat">Formato de datos de vitaminas</label>
+                                    <div class="custom-select-container form-select" data-target="vit-data-format">
+                                        <div class="custom-select-trigger">
+                                            <span data-i18n="ui.percentage">Porcentaje</span>
+                                            <i class="ti ti-chevron-down"></i>
+                                        </div>
+                                        <div class="custom-select-options glass-panel custom-scrollbar">
+                                            <div class="custom-option selected" data-value="percentage">
+                                                <span data-i18n="ui.percentage">Porcentaje</span>
+                                            </div>
+                                            <div class="custom-option" data-value="units">
+                                                <span data-i18n="ui.unitsOfMeasure">Unidades de medida</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <select id="vit-data-format" name="vit-data-format" class="hidden">
+                                        <option value="percentage">Porcentaje</option>
+                                        <option value="units">Unidades de medida</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="calcium" id="label-calcium"><span data-i18n="ui.calcium">Calcio</span> <span class="vit-unit"></span></label>
+                                    <input type="number" id="calcium" name="calcium" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="iron" id="label-iron"><span data-i18n="ui.iron">Hierro</span> <span class="vit-unit"></span></label>
+                                    <input type="number" id="iron" name="iron" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="vit-d" id="label-vit-d"><span data-i18n="ui.vitD">Vitamina D</span> <span class="vit-unit"></span></label>
+                                    <input type="number" id="vit-d" name="vit-d" min="0" step="0.1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="potassium" id="label-potassium"><span data-i18n="ui.potassium">Potasio</span> <span class="vit-unit"></span></label>
+                                    <input type="number" id="potassium" name="potassium" min="0" step="0.1">
+                                </div>
+                            </div>
+
+                            <div class="checkbox-group" style="margin-top: 24px;">
+                                <input type="checkbox" id="show-optional-vitamins" name="show-optional-vitamins">
+                                <label for="show-optional-vitamins" data-i18n="ui.optionalVitamins">Vitaminas opcionales</label>
+                                <i class="ti ti-info-circle info-icon" data-i18n-title="info.optionalVitamins"></i>
+                            </div>
+
+                            <div id="optional-vitamins-container" class="hidden" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+                                <div class="input-grid">
+                                    <div class="form-group vit-group">
+                                        <label for="vit-a" id="label-vit-a"><span data-i18n="ui.vitA">Vitamina A</span> <span class="vit-unit"></span></label>
+                                        <div class="vit-input-wrapper">
+                                            <input type="number" id="vit-a" name="vit-a" min="0" step="0.1">
+                                             <div class="custom-select-container vit-type-select form-select" data-target="vit-a-type">
+                                                <div class="custom-select-trigger">
+                                                    <span data-i18n="ui.vitARetinol">como retinol</span>
+                                                    <i class="ti ti-chevron-down"></i>
+                                                </div>
+                                                <div class="custom-select-options glass-panel custom-scrollbar">
+                                                    <div class="custom-option selected" data-value="retinol">
+                                                        <span data-i18n="ui.vitARetinol">como retinol</span>
+                                                    </div>
+                                                    <div class="custom-option" data-value="beta-carotene">
+                                                        <span data-i18n="ui.vitABetaCarotene">como beta-caroteno</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <select id="vit-a-type" name="vit-a-type" class="hidden">
+                                                <option value="retinol">como retinol</option>
+                                                <option value="beta-carotene">como beta-caroteno</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group vit-group">
+                                        <label for="vit-e" id="label-vit-e"><span data-i18n="ui.vitE">Vitamina E</span> <span class="vit-unit"></span></label>
+                                        <div class="vit-input-wrapper">
+                                            <input type="number" id="vit-e" name="vit-e" min="0" step="0.1">
+                                             <div class="custom-select-container vit-type-select form-select" data-target="vit-e-type">
+                                                <div class="custom-select-trigger">
+                                                    <span data-i18n="ui.vitErrr">de RRR-alfa-tocopherol</span>
+                                                    <i class="ti ti-chevron-down"></i>
+                                                </div>
+                                                <div class="custom-select-options glass-panel custom-scrollbar">
+                                                    <div class="custom-option selected" data-value="rrr">
+                                                        <span data-i18n="ui.vitErrr">de RRR-alfa-tocopherol</span>
+                                                    </div>
+                                                    <div class="custom-option" data-value="all-rac">
+                                                        <span data-i18n="ui.vitEallRac">de All-rac-alfa-tocopheryl</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <select id="vit-e-type" name="vit-e-type" class="hidden">
+                                                <option value="rrr">de RRR-alfa-tocopherol</option>
+                                                <option value="all-rac">de All-rac-alfa-tocopheryl</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vit-c" id="label-vit-c"><span data-i18n="ui.vitC">Vitamina C</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="vit-c" name="vit-c" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vit-k" id="label-vit-k"><span data-i18n="ui.vitK">Vitamina K</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="vit-k" name="vit-k" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="thiamin" id="label-thiamin"><span data-i18n="ui.thiamin">Tiamina</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="thiamin" name="thiamin" min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="riboflavin" id="label-riboflavin"><span data-i18n="ui.riboflavin">Riboflavina</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="riboflavin" name="riboflavin" min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="niacin" id="label-niacin"><span data-i18n="ui.niacin">Niacina</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="niacin" name="niacin" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vit-b6" id="label-vit-b6"><span data-i18n="ui.vitB6">Vitamina B6</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="vit-b6" name="vit-b6" min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="folate" id="label-folate"><span data-i18n="ui.folate">Folato</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="folate" name="folate" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="folic-acid" id="label-folic-acid"><span data-i18n="ui.folicAcid">Ácido fólico</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="folic-acid" name="folic-acid" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="vit-b12" id="label-vit-b12"><span data-i18n="ui.vitB12">Vitamina B12</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="vit-b12" name="vit-b12" min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="biotin" id="label-biotin"><span data-i18n="ui.biotin">Biotina</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="biotin" name="biotin" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pantothenic-acid" id="label-pantothenic-acid"><span data-i18n="ui.pantothenicAcid">Ácido pantoténico</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="pantothenic-acid" name="pantothenic-acid" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phosphorus" id="label-phosphorus"><span data-i18n="ui.phosphorus">Fósforo</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="phosphorus" name="phosphorus" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="iodine" id="label-iodine"><span data-i18n="ui.iodine">Yodo</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="iodine" name="iodine" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="magnesium" id="label-magnesium"><span data-i18n="ui.magnesium">Magnesio</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="magnesium" name="magnesium" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="zinc" id="label-zinc"><span data-i18n="ui.zinc">Zinc</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="zinc" name="zinc" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="selenium" id="label-selenium"><span data-i18n="ui.selenium">Selenio</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="selenium" name="selenium" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="copper" id="label-copper"><span data-i18n="ui.copper">Cobre</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="copper" name="copper" min="0" step="0.01">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="manganese" id="label-manganese"><span data-i18n="ui.manganese">Manganeso</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="manganese" name="manganese" min="0" step="0.1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chromium" id="label-chromium"><span data-i18n="ui.chromium">Cromo</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="chromium" name="chromium" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="molybdenum" id="label-molybdenum"><span data-i18n="ui.molybdenum">Molibdeno</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="molybdenum" name="molybdenum" min="0" step="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="chloride" id="label-chloride"><span data-i18n="ui.chloride">Cloruro</span> <span class="vit-unit"></span></label>
+                                        <input type="number" id="chloride" name="chloride" min="0" step="1">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group nom-only hidden" style="margin-top: 1rem;">
+                                <h4 data-i18n="ui.sealsTitle">Sellos de Advertencia (México)</h4>
+                                <div class="checkbox-group" style="margin-bottom: 12px; gap: 15px; display: flex;">
+                                    <div>
+                                        <input type="checkbox" id="auto-calculate-seals" name="auto-calculate-seals" checked>
+                                        <label for="auto-calculate-seals" data-i18n="ui.autoCalculateSeals">Cálculo automático de sellos</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.autoCalculateSeals"></i>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" id="small-package" name="small-package">
+                                        <label for="small-package" data-i18n="ui.smallPackage">Envase Pequeño (< 40cm²)</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.smallPackage"></i>
+                                    </div>
+                                </div>
+                                <div id="manual-seals-container" class="hidden">
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="seal-calories" name="seal-calories">
+                                        <label for="seal-calories" data-i18n="ui.sealCal">Exceso Calorías</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.sealCal"></i>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="seal-sugars" name="seal-sugars">
+                                        <label for="seal-sugars" data-i18n="ui.sealSugars">Exceso Azúcares</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.sealSugars"></i>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="seal-sat-fat" name="seal-sat-fat">
+                                        <label for="seal-sat-fat" data-i18n="ui.sealSatFat">Exceso Grasas Saturadas</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.sealSatFat"></i>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="seal-trans-fat" name="seal-trans-fat">
+                                        <label for="seal-trans-fat" data-i18n="ui.sealTransFat">Exceso Grasas Trans</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.sealTransFat"></i>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="seal-sodium" name="seal-sodium">
+                                        <label for="seal-sodium" data-i18n="ui.sealSodium">Exceso Sodio</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.sealSodium"></i>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="caution-caffeine" name="caution-caffeine">
+                                        <label for="caution-caffeine" data-i18n="ui.cautionCaffeine">Contiene Cafeína</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.cautionCaffeine"></i>
+                                    </div>
+                                    <div class="checkbox-group">
+                                        <input type="checkbox" id="caution-sweeteners" name="caution-sweeteners">
+                                        <label for="caution-sweeteners" data-i18n="ui.cautionSweeteners">Contiene Edulcorantes</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.cautionSweeteners"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ingredients & Allergens -->
+                    <div class="form-section nom-only eu-only hidden">
+                        <div class="section-header">
+                            <i class="ti ti-list-details"></i>
+                            <h3 data-i18n="ui.sectionOther">Ingredientes y Alérgenos</h3>
+                            <i class="ti ti-chevron-down toggle-icon"></i>
+                        </div>
+                        <div class="section-content">
+                            <div class="form-group">
+                                <label for="ingredients" data-i18n="ui.ingredients">Ingredientes</label>
+                                <textarea id="ingredients" name="ingredients" rows="3" placeholder="Ej. Agua, azúcares añadidos (sacarosa)..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="allergens" data-i18n="ui.allergens">Alérgenos</label>
+                                <input type="text" id="allergens" name="allergens" placeholder="Ej. CONTIENE LECHE Y SOYA">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- Main Panel: Preview -->
+            <section class="preview-panel">
+                <div class="preview-toolbar">
+                    <div class="toolbar-left">
+                        <button id="expand-sidebar" class="icon-btn hidden" title="Mostrar Parámetros" data-i18n-title="ui.expandSidebar">
+                            <i class="ti ti-layout-sidebar-left-expand"></i>
+                        </button>
+                        <div class="zoom-controls">
+                            <button class="icon-btn" id="zoom-out"><i class="ti ti-zoom-out"></i></button>
+                            <span id="zoom-level">100%</span>
+                            <button class="icon-btn" id="zoom-in"><i class="ti ti-zoom-in"></i></button>
+                        </div>
+                    </div>
+                    <div class="export-controls">
+                        <button class="btn btn-secondary" id="preview-btn">
+                            <i class="ti ti-maximize"></i> <span data-i18n="ui.bigView">Vista Grande</span>
+                        </button>
+                        <div class="dropdown">
+                            <button class="btn btn-secondary" id="export-btn">
+                                <i class="ti ti-download"></i> <span data-i18n="ui.export">Exportar</span>
+                                <i class="ti ti-chevron-down"></i>
+                            </button>
+                            <div class="dropdown-menu glass-panel">
+                                <form id="export-form">
+                                    <h4 data-i18n="ui.jpgOptions">Opciones de JPG</h4>
+                                    <div class="form-group">
+                                        <label for="jpg-scale" data-i18n="ui.resScale">Escala de resolución (x1 - x5)</label>
+                                        <input type="range" id="jpg-scale" min="1" max="5" value="2" step="1">
+                                        <span id="jpg-scale-val" style="padding-top: 5px;">2x <span data-i18n="ui.highRes">Alta Resolución</span></span>
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-block" id="export-jpg">
+                                        <i class="ti ti-photo"></i> <span data-i18n="ui.downloadJpg">Descargar JPG</span>
+                                    </button>
+                                    <hr>
+                                    <h4 data-i18n="ui.svgOptions">Opciones de SVG</h4>
+                                    <!-- <div class="checkbox-group" style="padding-bottom: 5px;">
+                                        <input type="checkbox" id="svg-expand-fonts" checked>
+                                        <label for="svg-expand-fonts" data-i18n="ui.expandFonts">Expandir fuentes (trazos)</label>
+                                        <i class="ti ti-info-circle info-icon" data-i18n-title="info.expandFonts"></i>
+                                    </div> -->
+                                    <button type="button" class="btn btn-secondary btn-block" id="export-svg">
+                                        <i class="ti ti-vector"></i> <span data-i18n="ui.downloadSvg">Descargar SVG</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="preview-playground custom-scrollbar" id="preview-container">
+                    <div id="initial-placeholder" class="initial-placeholder">
+                        <i class="ti ti-tag"></i>
+                        <h2 data-i18n="ui.welcomeTitle">Generador de Etiquetas Nutricionales</h2>
+                        <p data-i18n="ui.welcomeDesc">Crea etiquetas bajo el estándar de la FDA (EEUU). Exporta en formatos JPG de alta calidad y archivos vectoriales SVG.</p>
+                        <div class="placeholder-actions">
+                            <button class="btn btn-secondary" id="start-blank-btn">
+                                <i class="ti ti-file-plus"></i> <span data-i18n="ui.startBlank">Comenzar desde cero</span>
+                            </button>
+                            <button class="btn btn-primary" id="start-sample-btn">
+                                <i class="ti ti-file-text"></i> <span data-i18n="ui.startSample">Comenzar con etiqueta de muestra</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="label-wrapper fda-standard vertical hidden" id="nutrition-label">
+                        <!-- Generado por JS -->
+                    </div>
+                    <div id="construction-view" class="construction-view hidden">
+                        <i class="ti ti-tool"></i>
+                        <h2 data-i18n="ui.underConstructionTitle">Próximamente</h2>
+                        <p data-i18n="ui.underConstructionMsg">Esta normativa está en desarrollo y estará disponible en futuras versiones...</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <dialog id="info-modal" class="glass-dialog">
+        <button class="close-btn" id="close-info-btn"><i class="ti ti-x"></i></button>
+        <div class="dialog-content">
+            <div class="dialog-icon">
+                <i class="ti ti-code"></i>
+            </div>
+            <h2>NutriGen Pro</h2>
+            <p class="version-badge" data-i18n="ui.version">Versión 2.0.0</p>
+            <div class="developer-info">
+                <p><strong data-i18n="ui.devLabel">Desarrollado por:</strong> Firo</p>
+                <p><strong data-i18n="ui.emailLabel">Email:</strong> <a href="mailto:firogv96@outlook.com">firogv96@outlook.com</a></p>
+            </div>
+            <p class="description" data-i18n="ui.appDesc">
+                Un generador profesional de etiquetas de información nutricional en tiempo real, soportando los estándares más reconocidos a nivel mundial (FDA, NOM-051, UE). Exportación en alta resolución y formatos vectoriales.
+            </p>
+            <div class="dialog-actions">
+                <a href="https://github.com/firogv96/generador-etiquetas-nutrientes" target="_blank" class="btn btn-primary">
+                    <i class="ti ti-brand-github"></i> <span data-i18n="ui.ghLink">Ver en GitHub (README)</span>
+                </a>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="reset-modal" class="glass-dialog">
+        <button class="close-btn" id="close-reset-btn"><i class="ti ti-x"></i></button>
+        <div class="dialog-content">
+            <div class="dialog-icon">
+                <i class="ti ti-refresh"></i>
+            </div>
+            <h2 data-i18n="ui.resetTitle">Empezar de Cero</h2>
+            <p class="description" data-i18n="ui.resetDesc">
+                ¿Estás seguro de que quieres empezar una nueva etiqueta? Se perderán todos los datos y cambios actuales de manera irreversible.
+            </p>
+            <div class="dialog-actions" style="display: flex; gap: 1rem; justify-content: center;">
+                <button class="btn btn-secondary" id="cancel-reset-btn" data-i18n="ui.cancel">Cancelar</button>
+                <button class="btn btn-primary" id="confirm-reset-btn" data-i18n="ui.confirmReset">Sí, empezar de cero</button>
+            </div>
+        </div>
+    </dialog>
+    
+    <dialog id="responsive-modal" class="glass-dialog">
+        <div class="dialog-content">
+            <div class="dialog-icon">
+                <i class="ti ti-device-desktop"></i>
+            </div>
+            <h2 data-i18n="ui.responsiveTitle">Optimizado para Escritorio</h2>
+            <p class="description" data-i18n="ui.responsiveMsg">
+                Esta herramienta está diseñada y optimizada para pantallas de escritorio (mínimo 769px). No podemos garantizar una experiencia de usuario perfecta ni el correcto funcionamiento de todas las herramientas en dispositivos móviles o pantallas pequeñas.
+            </p>
+            <div class="dialog-actions">
+                <button class="btn btn-primary" id="close-responsive-btn" data-i18n="ui.responsiveBtn">Entiendo, continuar de todos modos</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="fullscreen-modal" class="fullscreen-dialog">
+        <div class="fullscreen-header">
+            <h3 data-i18n="ui.bigViewTitle">Vista Previa Aumentada</h3>
+            <button class="icon-btn close-fullscreen-btn"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="fullscreen-body custom-scrollbar">
+            <!-- El contenido se clona aquí via JS -->
+        </div>
+    </dialog>
+
+    <!-- Scripts -->
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html-to-image@1.11.11/dist/html-to-image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
+    
+    <!-- App Scripts -->
+    <script src="js/i18n.js?v=4"></script>
+    <script src="js/config.js?v=4"></script>
+    <script src="js/calc.js?v=4"></script>
+    <script src="js/validator.js?v=4"></script>
+    <script src="js/mexico-calc.js?v=4"></script>
+    <script src="js/mexico-validator.js?v=4"></script>
+    <script src="js/mexico-renderer.js?v=4"></script>
+    <script src="js/renderer.js?v=4"></script>
+    <script src="js/vector-export.js?v=4"></script>
+    <script src="js/export.js?v=4"></script>
+    <script src="js/ui.js?v=4"></script>
+    <script src="js/main.js?v=4"></script>
+</body>
+</html>

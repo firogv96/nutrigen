@@ -1,0 +1,546 @@
+/* Variables */
+:root {
+  --main-font: "Helvetica", "Arial", sans-serif;
+}
+
+/* Base styles for labels */
+.label-wrapper {
+  font-family: var(--main-font);
+  color: black;
+  background: white;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.label-wrapper * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* FDA Standard 2016 Vertical */
+.fda-standard {
+  width: 320px; /* ~7.5cm / 2.95in */
+  border: 1px solid black;
+  padding: 4pt; /* Use pt for consistent printing proportions */
+  font-family: var(--main-font);
+  line-height: normal;
+}
+
+.fda-title {
+  font-family: var(--main-font);
+  font-size: 30pt; /* Mandatory large size */
+  font-weight: 900;
+  border-bottom: 1pt solid black;
+  line-height: 0.95;
+  padding-bottom: 2pt;
+  margin-bottom: 2pt;
+  letter-spacing: -2px;
+}
+
+.fda-serving-container {
+  border-bottom: 10pt solid black; /* Thick bar */
+  padding-bottom: 4pt;
+  margin-bottom: 2pt;
+}
+
+.fda-servings {
+  font-size: 10pt;
+  font-weight: 400;
+}
+
+.fda-size {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14pt;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+.fda-calories-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-bottom: 5pt solid black; /* Medium thick bar */
+  padding-bottom: 4pt;
+  margin-bottom: 2pt;
+}
+
+.fda-calories-label {
+  font-size: 21pt;
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -1px;
+}
+
+.fda-calories-amount {
+  font-size: 32pt;
+  font-weight: 900;
+  line-height: 0.8;
+}
+
+.fda-dv-header {
+  text-align: right;
+  font-size: 10pt;
+  font-weight: 900;
+  border-bottom: 1px solid black;
+  padding-bottom: 2pt;
+}
+
+.fda-nutrient-line {
+  display: flex;
+  justify-content: space-between;
+  padding: 1pt 0;
+  border-bottom: 1px solid black;
+  font-size: 10pt;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+.fda-vits-container {
+  border-top: 5pt solid black;
+  padding-top: 2pt;
+  font-size: 10pt;
+  letter-spacing: -0.3px;
+}
+
+.fda-vit-line {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+  padding: 2pt 0;
+  line-height: 1.2;
+}
+
+.fda-vit-line:last-child {
+  border-bottom: none;
+}
+
+.fda-vit-label {
+  flex: 1;
+  line-height: 1.2;
+}
+
+.fda-vit-amount {
+  width: 70px;
+  text-align: left;
+}
+
+.fda-vit-dv {
+  width: 40px;
+  text-align: right;
+  font-weight: 900;
+}
+
+.fda-nutrient-line.sub {
+  padding-left: 10pt;
+}
+
+.fda-nutrient-line.deep-sub {
+  padding-left: 20pt;
+}
+
+.fda-nutrient-line.thick-border {
+  border-bottom: 5pt solid black;
+}
+
+.fda-info-text {
+  border-top: 5pt solid black;
+  font-size: 8pt;
+  margin-top: 1pt;
+  padding-top: 3pt;
+  line-height: 1.2;
+  letter-spacing: -0.3px;
+}
+
+/* Modifier weights */
+.fw-900 {
+  font-weight: 900;
+}
+.fw-700 {
+  font-weight: 700;
+}
+.fw-400 {
+  font-weight: 400;
+}
+
+/* NOM-051 Mexico Standard */
+.nom-standard {
+  width: 350px;
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.nom-title {
+  font-size: 24px;
+  font-weight: 900;
+  text-align: center;
+  border-bottom: 2px solid black;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.nom-servings {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.nom-per-container {
+  font-weight: 700;
+}
+
+.nom-nutrient-group {
+  border-bottom: 1px solid black;
+  padding: 4px 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nom-nutrient-name {
+  font-weight: bold;
+}
+
+.nom-nutrient-val {
+  font-weight: normal;
+}
+
+.nom-sub {
+  padding-left: 15px;
+  font-weight: normal;
+}
+
+.nom-thick-border {
+  border-top: 4px solid black;
+  border-bottom: 4px solid black;
+  padding: 5px 0;
+  margin-bottom: 5px;
+}
+
+/* EU 1169/2011 Standard (Tabular) */
+.eu-standard {
+  width: 400px;
+  border: 1px solid black;
+  padding: 10px;
+  font-family: var(--main-font);
+}
+
+.eu-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.eu-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.eu-table th,
+.eu-table td {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: left;
+  font-size: 13px;
+}
+
+.eu-table th {
+  font-weight: bold;
+}
+
+.eu-table .right {
+  text-align: right;
+}
+
+.eu-sub {
+  padding-left: 15px;
+  font-weight: normal;
+}
+
+/* Warning Seals (NOM-051) */
+.nom-seals-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.nom-seal {
+  width: 80px;
+  height: 80px;
+  background: black;
+  color: white;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: bold;
+  font-size: 10px;
+  padding: 5px;
+  border: 2px solid white;
+  outline: 2px solid black;
+  clip-path: polygon(
+    30% 0%,
+    70% 0%,
+    100% 30%,
+    100% 70%,
+    70% 100%,
+    30% 100%,
+    0% 70%,
+    0% 30%
+  );
+}
+
+.nom-seal span {
+  font-size: 8px;
+}
+
+.nom-caution {
+  width: 100%;
+  background: black;
+  color: white;
+  padding: 5px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 11px;
+  border: 2px solid white;
+  outline: 2px solid black;
+  margin-bottom: 5px;
+}
+
+/* Tabular layout modifications */
+.label-wrapper.fda-standard.tabular {
+  width: fit-content; /* Ajusta al contenido escalado */
+  padding: 4pt;
+}
+
+.fda-tabular-wrapper {
+  padding: 2pt;
+}
+
+.fda-tab-main-row {
+  display: flex;
+  min-height: 180px;
+}
+
+/* Col 1: Left (Info) */
+.fda-tab-left-col {
+  flex: 0 0 auto;
+  padding-right: 4pt;
+  display: flex;
+  flex-direction: column;
+  min-width: 195px;
+  max-width: 205px;
+}
+
+.fda-tab-left-col .fda-title {
+  font-size: 24pt;
+  border-bottom: 1pt solid black;
+  letter-spacing: -0.85px;
+}
+
+.fda-tab-left-col .fda-servings-container {
+  border-bottom: 1pt solid black;
+  margin-bottom: 4pt;
+  padding-bottom: 4pt;
+}
+
+.fda-tab-left-col .fda-calories-container {
+  border: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.fda-tab-left-col .fda-calories-label {
+  font-size: 16pt;
+  font-weight: 900;
+  line-height: 0.8;
+  letter-spacing: -0.85px;
+}
+
+.fda-tab-left-col .per-serving-text {
+  font-size: 10pt;
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 2pt;
+}
+
+.fda-tab-left-col .fda-calories-amount {
+  font-size: 32pt;
+  font-weight: 900;
+  line-height: 0.8;
+}
+
+/* Col 2: Middle (Nutrients & Vitamins) */
+.fda-tab-middle-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8pt;
+}
+
+.fda-tab-nutrients-top-row {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  column-gap: 8px;
+}
+
+.fda-tab-nutrients-header {
+  display: flex;
+  padding-bottom: 1pt;
+  margin-bottom: 1pt;
+  gap: 11pt;
+}
+
+.nut-header-col {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  font-size: 8pt;
+  font-weight: 900;
+  border-bottom: 5pt solid black;
+}
+
+.fda-tab-nutrients-grid {
+  display: flex;
+  flex: 1;
+  gap: 11pt;
+}
+
+.fda-tab-sub-col {
+  flex: 1;
+  border-bottom: 5pt solid black;
+}
+
+.fda-tab-sub-col:first-child {
+  border-right: 0pt solid black;
+}
+
+.fda-nutrient-line-tab {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid black;
+  font-size: 10pt;
+  padding: 1pt 0;
+  line-height: 1.1;
+}
+
+.fda-nutrient-line-tab:last-child {
+  border-bottom: none;
+}
+
+.fda-nutrient-line-tab.sub {
+  padding-left: 8pt;
+}
+
+.fda-nutrient-line-tab.deep-sub {
+  padding-left: 16pt;
+}
+
+.fda-tab-vits-bottom-row {
+  padding-top: 2pt;
+  font-size: 10pt;
+}
+
+.fda-tab-vits-row {
+  border-bottom: 1px solid black;
+  padding: 1pt 0;
+  text-align: left;
+}
+
+.fda-tab-vits-row:last-child {
+  border-bottom: none;
+}
+
+/* Col 3: Right (Footnote) */
+.fda-tab-right-col {
+  flex: 0 0 100px;
+  padding-left: 4pt;
+  font-size: 8pt;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 10pt;
+}
+
+.fda-tab-footnote {
+  line-height: 1.2;
+}
+
+.desktop-only {
+  display: inline-block;
+}
+
+/* Linear Layout */
+.label-wrapper.fda-standard.linear {
+  width: 729px;
+  border: 2.5pt solid black;
+  padding: 4pt 6pt;
+  font-size: 12pt;
+  line-height: 1.4;
+}
+
+.fda-linear-text {
+  text-align: justify;
+  transform: scaleX(0.8);
+  transform-origin: left top;
+  width: 125%; /* Compensa el escalado de 0.8 (1/0.8 = 1.25) */
+  margin-right: -25%; /* Envía el "exceso" al margen para evitar scroll horizontal si aplica */
+  line-height: 1.2;
+  letter-spacing: -0.9px;
+}
+
+.linear-title {
+  font-size: 20pt;
+  font-weight: 900;
+  margin-right: 2pt;
+  line-height: 1;
+}
+
+.linear-calories {
+  font-size: 16pt;
+}
+
+.linear-servings,
+.linear-size {
+  font-size: 14pt;
+}
+
+.linear-footer {
+  border-top: 1px solid black;
+  margin-top: 4pt;
+  padding-top: 2pt;
+  font-size: 10pt;
+  text-align: left;
+}
+
+.no-bold {
+  font-weight: 400 !important;
+}
+
+/* Ajustes particulares de fuentes */
+.condensed {
+  display: inline-block;
+  transform: scaleX(0.7);
+  transform-origin: left;
+}
+.condensed-mid {
+  display: inline-block;
+  transform: scaleX(0.85);
+  transform-origin: left;
+}
+.text-12p {
+  font-size: 12pt;
+}
+.text-14p {
+  font-size: 14pt;
+}
